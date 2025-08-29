@@ -1,5 +1,10 @@
 package com.viceri.desafio.todo.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Prioridade de uma tarefa", example = "ALTA")
 public enum TaskPriority {
     ALTA("Alta"),
     MEDIA("Média"),
@@ -10,7 +15,8 @@ public enum TaskPriority {
     TaskPriority(String displayName) {
         this.displayName = displayName;
     }
-
+    
+    @JsonValue
     public String getDisplayName() {
         return displayName;
     }

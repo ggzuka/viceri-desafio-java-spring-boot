@@ -5,17 +5,33 @@ import java.time.LocalDateTime;
 import com.viceri.desafio.todo.domain.enums.TaskPriority;
 import com.viceri.desafio.todo.domain.model.Task;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Resposta com informações de uma tarefa")
 public class TaskResponse {
+    @Schema(description = "ID da tarefa", example = "1")
+
     private Long id;
+    @Schema(description = "Descrição da tarefa", example = "Comprar materiais")
+
     private String description;
+    @Schema(description = "Prioridade da tarefa", example = "ALTA")
+
     private TaskPriority priority;
+    @Schema(description = "Status de conclusão da tarefa", example = "false")
+
     private boolean completed;
+    @Schema(description = "Data de criação da tarefa", example = "2025-08-29T15:00:00")
+
     private LocalDateTime createdAt;
+    @Schema(description = "Data da última atualização da tarefa", example = "2025-08-29T15:30:00")
+
     private LocalDateTime updatedAt;
 
-    public TaskResponse(){}
+    public TaskResponse() {
+    }
 
-    public TaskResponse(Task task){
+    public TaskResponse(Task task) {
         this.id = task.getId();
         this.description = task.getDescription();
         this.priority = task.getPriority();

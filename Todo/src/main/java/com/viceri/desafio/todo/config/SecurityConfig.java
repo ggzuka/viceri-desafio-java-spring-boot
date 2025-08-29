@@ -31,10 +31,19 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**", "/api/users", "/h2-console/**").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/api/users",
+                                "/h2-console/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html",
+                                "/api-docs/**"
+                        ).permitAll()
                         .anyRequest().authenticated())
-                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) 
+                .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
                 .addFilterBefore(new AuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

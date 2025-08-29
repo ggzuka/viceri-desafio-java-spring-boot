@@ -23,6 +23,14 @@ public class AuthFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        String path = request.getServletPath();
+        return path.startsWith("/v3/api-docs")
+                || path.startsWith("/swagger-ui")
+                || path.startsWith("/api-docs"); // <- inclui swagger-config
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
@@ -44,7 +52,6 @@ public class AuthFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } else {
-                // token inválido → responde 401
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
                 return;
             }

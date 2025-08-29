@@ -86,6 +86,8 @@ public class GlobalExceptionHandler {
             return new ResponseEntity<>(body, status);
         }
 
+        ex.printStackTrace();
+
         // Para outras exceções, retorna um erro genérico
         Map<String, Object> body = new HashMap<>();
         body.put("status", HttpStatus.INTERNAL_SERVER_ERROR.value());

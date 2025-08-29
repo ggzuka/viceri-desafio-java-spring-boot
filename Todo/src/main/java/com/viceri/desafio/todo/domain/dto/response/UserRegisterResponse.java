@@ -1,8 +1,17 @@
 package com.viceri.desafio.todo.domain.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Resposta retornada após registrar um usuário")
 public class UserRegisterResponse {
+    @Schema(description = "ID do usuário gerado pelo sistema", example = "1")
+
     private Long id;
+    @Schema(description = "Nome do usuário", example = "Gabriel Guilhem")
+
     private String name;
+    @Schema(description = "Email do usuário", example = "gabriel@example.com")
+
     private String email;
 
     // Construtores

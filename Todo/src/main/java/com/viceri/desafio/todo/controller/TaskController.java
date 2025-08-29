@@ -23,11 +23,18 @@ import com.viceri.desafio.todo.domain.security.CurrentUserId;
 import com.viceri.desafio.todo.domain.validation.ValidPriorityParam;
 import com.viceri.desafio.todo.service.TaskService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/tasks")
 @Validated
+@Tag(name = "Tarefas", description = "Endpoints para gerenciamento de tarefas")
+@SecurityRequirement(name = "bearerAuth") // Requer autenticação para todos os endpoints
 public class TaskController {
 
     private final TaskService taskService;
@@ -37,6 +44,12 @@ public class TaskController {
     }
 
     @PostMapping
+    @Operation(summary = "Criar tarefa", description = "Cria uma nova tarefa para o usuário autenticado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Tarefa criada com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos"),
+        @ApiResponse(responseCode = "401", description = "Não autorizado")
+    })
     public ResponseEntity<TaskResponse> createTask(
             @Valid @RequestBody TaskCreateRequest request,
             @CurrentUserId Long userId) {
@@ -76,6 +89,12 @@ public class TaskController {
     }
 
     @GetMapping
+    @Operation(summary = "Listar tarefas", description = "Lista as tarefas pendentes do usuário autenticado, opcionalmente filtradas por prioridade")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Lista de tarefas retornada com sucesso"),
+        @ApiResponse(responseCode = "401", description = "Não autorizado"),
+        @ApiResponse(responseCode = "400", description = "Parâmetro de prioridade inválido")
+    })
     public ResponseEntity<List<TaskResponse>> getUserTasks(
             @CurrentUserId Long userId,
             @RequestParam(required = false)
