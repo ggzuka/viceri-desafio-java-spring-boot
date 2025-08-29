@@ -5,21 +5,19 @@ import java.time.LocalDateTime;
 import com.viceri.desafio.todo.domain.enums.TaskPriority;
 import com.viceri.desafio.todo.domain.model.Task;
 
-public class TaskResponse {
+public class TaskUpdateResponse {
     private Long id;
     private String description;
     private TaskPriority priority;
-    private boolean completed;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public TaskResponse(Task task){
-        this.id = task.getId();
-        this.description = task.getDescription();
-        this.priority = task.getPriority();
-        this.completed = task.isCompleted();
-        this.createdAt = task.getCreatedAt();
-        this.updatedAt = task.getUpdatedAt();
+    public TaskUpdateResponse(Task savedTask) {
+        this.id = savedTask.getId();
+        this.description = savedTask.getDescription();
+        this.priority = savedTask.getPriority();
+        this.createdAt = savedTask.getCreatedAt();
+        this.updatedAt = savedTask.getUpdatedAt();
     }
 
     // Getters e Setters
@@ -45,14 +43,6 @@ public class TaskResponse {
 
     public void setPriority(TaskPriority priority) {
         this.priority = priority;
-    }
-
-    public boolean isCompleted() {
-        return completed;
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed = completed;
     }
 
     public LocalDateTime getCreatedAt() {

@@ -7,7 +7,6 @@ import com.viceri.desafio.todo.domain.exception.user.WeakPasswordException;
 import com.viceri.desafio.todo.domain.model.User;
 import com.viceri.desafio.todo.domain.validation.PasswordValidator;
 import com.viceri.desafio.todo.repository.UserRepository;
-import com.viceri.desafio.todo.service.UserService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

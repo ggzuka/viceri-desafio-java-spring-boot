@@ -65,15 +65,6 @@ public class TaskRepository {
         return affectedRows > 0;
     }
 
-    private Long getGeneratedId(KeyHolder keyHolder) {
-        try {
-            return (Long) keyHolder.getKeys().get("id");
-        } catch (Exception e) {
-            System.err.println("Erro ao obter ID gerado: " + e.getMessage());
-        }
-        return null;
-    }
-
     public Optional<Task> findById(Long id) {
         String sql = "SELECT * FROM tasks WHERE id = ?";
         try {
@@ -84,13 +75,8 @@ public class TaskRepository {
         }
     }
 
-    public List<Task> findByUserId(Long userId) {
-        String sql = "SELECT * FROM tasks WHERE user_id = ? ORDER BY created_at DESC";
-        return jdbcTemplate.query(sql, rowMapper, userId);
-    }
-
-    public List<Task> findByUserIdAndPriority(Long userId, TaskPriority priority) {
-        String sql = "SELECT * FROM tasks WHERE user_id = ? AND priority = ? ORDER BY created_at DESC";
+    public List<Task> findPendingByUserIdAndPriority(Long userId, TaskPriority priority) {
+        String sql = "SELECT * FROM tasks WHERE user_id = ? AND priority = ? and completed = false ORDER BY created_at DESC";
         return jdbcTemplate.query(sql, rowMapper, userId, priority.name());
     }
 
@@ -99,14 +85,32 @@ public class TaskRepository {
         return jdbcTemplate.query(sql, rowMapper, userId);
     }
 
-    public void update(Task task) {
-        String sql = "UPDATE tasks SET description = ?, priority = ?, completed = ?, updated_at = ? WHERE id = ? AND user_id = ?";
-        jdbcTemplate.update(sql,
-                task.getDescription(),
-                task.getPriority().name(),
-                task.isCompleted(),
+    public Optional<Task> update(Long id, String description, TaskPriority priority, Long userId) {
+        String sql = "UPDATE tasks SET description = ?, priority = ?, updated_at = ? WHERE id = ? AND user_id = ?";
+        int affectedRows = jdbcTemplate.update(sql,
+                description,
+                priority.name(),
                 Timestamp.valueOf(LocalDateTime.now()),
-                task.getId(),
-                task.getUserId());
+                id,
+                userId);
+        return affectedRows > 0 ? findById(id) : Optional.empty();
+    }
+
+    public Optional<Task> markTaskAsCompleted(Long id, Long userId) {
+        String sql = "UPDATE tasks SET completed = true, updated_at = ? WHERE id = ? AND user_id = ?";
+        int affectedRows = jdbcTemplate.update(sql,
+                Timestamp.valueOf(LocalDateTime.now()),
+                id,
+                userId);
+        return affectedRows > 0 ? findById(id) : Optional.empty();
+    }
+
+    private Long getGeneratedId(KeyHolder keyHolder) {
+        try {
+            return (Long) keyHolder.getKeys().get("id");
+        } catch (Exception e) {
+            System.err.println("Erro ao obter ID gerado: " + e.getMessage());
+        }
+        return null;
     }
 }

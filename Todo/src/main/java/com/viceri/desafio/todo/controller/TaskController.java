@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.viceri.desafio.todo.domain.dto.request.TaskCreateRequest;
+import com.viceri.desafio.todo.domain.dto.request.TaskUpdateRequest;
 import com.viceri.desafio.todo.domain.dto.response.TaskCreateResponse;
+import com.viceri.desafio.todo.domain.dto.response.TaskResponse;
+import com.viceri.desafio.todo.domain.dto.response.TaskUpdateResponse;
 import com.viceri.desafio.todo.domain.security.CurrentUserId;
+import com.viceri.desafio.todo.domain.validation.ValidPriorityParam;
 import com.viceri.desafio.todo.service.TaskService;
 
 import jakarta.validation.Valid;
@@ -52,38 +56,38 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-//  @GetMapping
-//     public ResponseEntity<List<TaskResponse>> getUserTasks(
-//             @CurrentUserId Long userId,
-//             @RequestParam(required = false) String priority) {
-        
-//         List<TaskResponse> tasks;
-//         if (priority != null) {
-//             tasks = taskService.getUserTasksByPriority(userId, priority);
-//         } else {
-//             tasks = taskService.getUserTasks(userId);
-//         }
-        
-//         return ResponseEntity.ok(tasks);
-//     }
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskUpdateResponse> updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskUpdateRequest request,
+            @CurrentUserId Long userId) {
 
-//     @PutMapping("/{id}")
-//     public ResponseEntity<TaskResponse> updateTask(
-//             @PathVariable Long id,
-//             @Valid @RequestBody TaskCreateRequest request,
-//             @CurrentUserId Long userId) {
-        
-//         TaskResponse response = taskService.updateTask(id, request, userId);
-//         return ResponseEntity.ok(response);
-//     }
+        TaskUpdateResponse response = taskService.updateTask(id, request, userId);
+        return ResponseEntity.ok(response);
+    }
 
-//     @PatchMapping("/{id}/complete")
-//     public ResponseEntity<TaskResponse> markTaskAsCompleted(
-//             @PathVariable Long id,
-//             @CurrentUserId Long userId) {
-        
-//         TaskResponse response = taskService.markTaskAsCompleted(id, userId);
-//         return ResponseEntity.ok(response);
-//     }
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<TaskUpdateResponse> markTaskAsCompleted(
+            @PathVariable Long id,
+            @CurrentUserId Long userId) {
 
+        TaskUpdateResponse response = taskService.markTaskAsCompleted(id, userId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TaskResponse>> getUserTasks(
+            @CurrentUserId Long userId,
+            @RequestParam(required = false)
+            @ValidPriorityParam() String priority) {
+
+        List<TaskResponse> tasks;
+        if (priority != null) {
+            tasks = taskService.getUserPendingTasksByPriority(userId, priority);
+        } else {
+            tasks = taskService.getUserPendingTasks(userId);
+        }
+
+        return ResponseEntity.ok(tasks);
+    }
 }

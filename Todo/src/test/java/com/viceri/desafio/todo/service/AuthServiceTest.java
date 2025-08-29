@@ -3,7 +3,6 @@ package com.viceri.desafio.todo.service;
 import com.viceri.desafio.todo.domain.exception.shared.UnauthorizedException;
 import com.viceri.desafio.todo.domain.model.User;
 import com.viceri.desafio.todo.repository.UserRepository;
-import com.viceri.desafio.todo.service.AuthService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
