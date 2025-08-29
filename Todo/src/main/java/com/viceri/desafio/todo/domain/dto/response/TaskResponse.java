@@ -13,6 +13,8 @@ public class TaskResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public TaskResponse(){}
+
     public TaskResponse(Task task){
         this.id = task.getId();
         this.description = task.getDescription();

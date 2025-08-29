@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.viceri.desafio.todo.domain.dto.request.TaskCreateRequest;
 import com.viceri.desafio.todo.domain.dto.request.TaskUpdateRequest;
-import com.viceri.desafio.todo.domain.dto.response.TaskCreateResponse;
 import com.viceri.desafio.todo.domain.dto.response.TaskResponse;
-import com.viceri.desafio.todo.domain.dto.response.TaskUpdateResponse;
 import com.viceri.desafio.todo.domain.security.CurrentUserId;
 import com.viceri.desafio.todo.domain.validation.ValidPriorityParam;
 import com.viceri.desafio.todo.service.TaskService;
@@ -28,6 +27,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/tasks")
+@Validated
 public class TaskController {
 
     private final TaskService taskService;
@@ -37,12 +37,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public ResponseEntity<TaskCreateResponse> createTask(
+    public ResponseEntity<TaskResponse> createTask(
             @Valid @RequestBody TaskCreateRequest request,
             @CurrentUserId Long userId) {
 
-        TaskCreateResponse response = taskService
-                .createTask(userId, request.getDescription(), request.getPriority());
+        TaskResponse response = taskService
+                .createTask(request, userId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -57,21 +57,21 @@ public class TaskController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskUpdateResponse> updateTask(
+    public ResponseEntity<TaskResponse> updateTask(
             @PathVariable Long id,
             @Valid @RequestBody TaskUpdateRequest request,
             @CurrentUserId Long userId) {
 
-        TaskUpdateResponse response = taskService.updateTask(id, request, userId);
+        TaskResponse response = taskService.updateTask(id, request, userId);
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/{id}/complete")
-    public ResponseEntity<TaskUpdateResponse> markTaskAsCompleted(
+    public ResponseEntity<TaskResponse> markTaskAsCompleted(
             @PathVariable Long id,
             @CurrentUserId Long userId) {
 
-        TaskUpdateResponse response = taskService.markTaskAsCompleted(id, userId);
+        TaskResponse response = taskService.markTaskAsCompleted(id, userId);
         return ResponseEntity.ok(response);
     }
 

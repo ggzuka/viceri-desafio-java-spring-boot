@@ -10,9 +10,9 @@ public class PriorityParamValidator implements ConstraintValidator<ValidPriority
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {
-            return true; // Parâmetro opcional
+            return true; // Parâmetro opcional, null é válido
         }
-
+        
         try {
             TaskPriority.valueOf(value.toUpperCase());
             return true;

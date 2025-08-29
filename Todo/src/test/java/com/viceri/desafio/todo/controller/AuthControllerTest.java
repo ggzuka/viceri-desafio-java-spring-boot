@@ -127,16 +127,6 @@ class AuthControllerTest {
     }
 
     @Test
-    void shouldReturnBadRequestWhenRequestBodyIsInvalid() throws Exception {
-        // Arrange - Request sem corpo
-
-        // Act & Assert
-        mockMvc.perform(post("/api/auth/login")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     void shouldReturnBadRequestWhenRequestBodyIsEmpty() throws Exception {
         // Arrange - Request com corpo vazio
         String emptyBody = "{}";

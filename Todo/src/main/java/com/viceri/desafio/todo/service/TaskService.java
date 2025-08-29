@@ -1,9 +1,8 @@
 package com.viceri.desafio.todo.service;
 
+import com.viceri.desafio.todo.domain.dto.request.TaskCreateRequest;
 import com.viceri.desafio.todo.domain.dto.request.TaskUpdateRequest;
-import com.viceri.desafio.todo.domain.dto.response.TaskCreateResponse;
 import com.viceri.desafio.todo.domain.dto.response.TaskResponse;
-import com.viceri.desafio.todo.domain.dto.response.TaskUpdateResponse;
 import com.viceri.desafio.todo.domain.enums.TaskPriority;
 import com.viceri.desafio.todo.domain.exception.shared.ResourceNotFoundException;
 import com.viceri.desafio.todo.domain.model.Task;
@@ -26,7 +25,7 @@ public class TaskService {
         this.userRepository = userRepository;
     }
 
-    public TaskCreateResponse createTask(Long userId, String description, TaskPriority priority) {
+    public TaskResponse createTask(TaskCreateRequest request, Long userId) {
 
         // Verificar se o usuário existe
         userRepository
@@ -34,12 +33,12 @@ public class TaskService {
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
 
         Task newTask = new Task();
-        newTask.setPriority(priority);
-        newTask.setDescription(description);
+        newTask.setPriority(request.getPriority());
+        newTask.setDescription(request.getDescription());
         newTask.setUserId(userId);
 
         Task savedTask = taskRepository.save(newTask);
-        return new TaskCreateResponse(savedTask);
+        return new TaskResponse(savedTask);
     }
 
     public void deleteTask(Long id, Long userId) {
@@ -55,7 +54,7 @@ public class TaskService {
         }
     }
 
-    public TaskUpdateResponse updateTask(Long id, TaskUpdateRequest request, Long userId) {
+    public TaskResponse updateTask(Long id, TaskUpdateRequest request, Long userId) {
 
         // Verificar se o usuário existe
         userRepository
@@ -64,11 +63,11 @@ public class TaskService {
 
         return taskRepository
                 .update(id, request.getDescription(), request.getPriority(), userId)
-                .map(t -> new TaskUpdateResponse(t))
+                .map(t -> new TaskResponse(t))
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada ou não pertence ao usuário"));
     }
 
-    public TaskUpdateResponse markTaskAsCompleted(Long id, Long userId) {
+    public TaskResponse markTaskAsCompleted(Long id, Long userId) {
 
         // Verificar se o usuário existe
         userRepository
@@ -77,7 +76,7 @@ public class TaskService {
 
         return taskRepository
                 .markTaskAsCompleted(id, userId)
-                .map(t -> new TaskUpdateResponse(t))
+                .map(t -> new TaskResponse(t))
                 .orElseThrow(() -> new ResourceNotFoundException("Tarefa não encontrada ou não pertence ao usuário"));
     }
 
