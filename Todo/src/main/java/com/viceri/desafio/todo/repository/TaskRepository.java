@@ -59,6 +59,12 @@ public class TaskRepository {
         return task;
     }
 
+    public boolean delete(Long id, Long userId) {
+        String sql = "DELETE FROM tasks WHERE id = ? AND user_id = ?";
+        int affectedRows = jdbcTemplate.update(sql, id, userId);
+        return affectedRows > 0;
+    }
+
     private Long getGeneratedId(KeyHolder keyHolder) {
         try {
             return (Long) keyHolder.getKeys().get("id");
@@ -102,11 +108,5 @@ public class TaskRepository {
                 Timestamp.valueOf(LocalDateTime.now()),
                 task.getId(),
                 task.getUserId());
-    }
-
-    public boolean delete(Long id, Long userId) {
-        String sql = "DELETE FROM tasks WHERE id = ? AND user_id = ?";
-        int affectedRows = jdbcTemplate.update(sql, id, userId);
-        return affectedRows > 0;
     }
 }

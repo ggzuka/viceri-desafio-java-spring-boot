@@ -36,4 +36,17 @@ public class TaskService {
         Task savedTask = taskRepository.save(newTask);
         return new TaskCreateResponse(savedTask);
     }
+
+    public void deleteTask(Long id, Long userId) {
+
+        // Verificar se o usuário existe
+        userRepository
+                .findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado"));
+
+        Boolean deleted = taskRepository.delete(id, userId);
+        if (!deleted) {
+            throw new ResourceNotFoundException("Tarefa não encontrada ou não pertence ao usuário");
+        }
+    }
 }

@@ -43,6 +43,15 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(
+            @PathVariable Long id,
+            @CurrentUserId Long userId) {
+
+        taskService.deleteTask(id, userId);
+        return ResponseEntity.noContent().build();
+    }
+
 //  @GetMapping
 //     public ResponseEntity<List<TaskResponse>> getUserTasks(
 //             @CurrentUserId Long userId,
@@ -66,15 +75,6 @@ public class TaskController {
         
 //         TaskResponse response = taskService.updateTask(id, request, userId);
 //         return ResponseEntity.ok(response);
-//     }
-
-//     @DeleteMapping("/{id}")
-//     public ResponseEntity<Void> deleteTask(
-//             @PathVariable Long id,
-//             @CurrentUserId Long userId) {
-        
-//         taskService.deleteTask(id, userId);
-//         return ResponseEntity.noContent().build();
 //     }
 
 //     @PatchMapping("/{id}/complete")
