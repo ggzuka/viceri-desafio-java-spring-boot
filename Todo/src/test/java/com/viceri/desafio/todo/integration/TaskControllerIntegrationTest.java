@@ -77,7 +77,7 @@ class TaskControllerIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value("Test Task"))
-                .andExpect(jsonPath("$.priority").value("MEDIA"));
+                .andExpect(jsonPath("$.priority").value(TaskPriority.MEDIA.getDisplayName()));
     }
 
     @Test
@@ -146,7 +146,7 @@ class TaskControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value("Updated Task"))
-                .andExpect(jsonPath("$.priority").value("ALTA"));
+                .andExpect(jsonPath("$.priority").value(TaskPriority.ALTA.getDisplayName()));
     }
 
     @Test

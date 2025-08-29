@@ -1,6 +1,7 @@
 package com.viceri.desafio.todo.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.viceri.desafio.todo.config.CurrentUserIdResolverConfig;
 import com.viceri.desafio.todo.domain.dto.request.TaskCreateRequest;
 import com.viceri.desafio.todo.domain.dto.request.TaskUpdateRequest;
@@ -55,6 +56,8 @@ class TaskControllerTest {
         taskResponse.setCompleted(false);
         taskResponse.setCreatedAt(LocalDateTime.now());
         taskResponse.setUpdatedAt(LocalDateTime.now());
+
+        objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, false);
     }
 
     @Test
@@ -76,7 +79,7 @@ class TaskControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value("Test Task"))
-                .andExpect(jsonPath("$.priority").value("MEDIA"));
+                .andExpect(jsonPath("$.priority").value(TaskPriority.MEDIA.getDisplayName()));
     }
 
     @Test
@@ -121,7 +124,7 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1L))
                 .andExpect(jsonPath("$.description").value("Updated Task"))
-                .andExpect(jsonPath("$.priority").value("ALTA"));
+                .andExpect(jsonPath("$.priority").value(TaskPriority.ALTA.getDisplayName()));
     }
 
     @Test
@@ -160,7 +163,7 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].description").value("Test Task"))
-                .andExpect(jsonPath("$[0].priority").value("MEDIA"));
+                .andExpect(jsonPath("$[0].priority").value(TaskPriority.MEDIA.getDisplayName()));
     }
 
     @Test
@@ -177,7 +180,7 @@ class TaskControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(1L))
                 .andExpect(jsonPath("$[0].description").value("Test Task"))
-                .andExpect(jsonPath("$[0].priority").value("MEDIA"));
+                .andExpect(jsonPath("$[0].priority").value(TaskPriority.MEDIA.getDisplayName()));
     }
 
     @Test

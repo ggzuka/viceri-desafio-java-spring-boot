@@ -11,6 +11,8 @@ public class AuthResponse {
     @Schema(description = "Tipo do token", example = "Bearer")
     private String type = "Bearer";
 
+    public AuthResponse() {}
+
     public AuthResponse(String token) {
         this.token = token;
     }

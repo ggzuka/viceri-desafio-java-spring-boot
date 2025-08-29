@@ -1,10 +1,12 @@
 package com.viceri.desafio.todo.domain.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Schema(description = "Prioridade de uma tarefa", example = "ALTA")
+
+@JsonDeserialize(using = TaskPriorityDeserializer.class)
 public enum TaskPriority {
     ALTA("Alta"),
     MEDIA("Média"),
